@@ -46,7 +46,7 @@ export default function InviteTable(props: { tableData: any }) {
             ),
             cell: (info: any) => (
                 <Flex align='center'>
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                    <Text color={textColor} fontSize='sm' fontWeight='700' textDecoration={info.row.original.uses.length > 0 ? 'line-through' : null}>
                         {info.getValue()}
                     </Text>
                 </Flex>
