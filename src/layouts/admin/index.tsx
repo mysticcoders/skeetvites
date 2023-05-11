@@ -8,8 +8,10 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from 'routes';
-import {getInviteCodes, getProfile, login} from "../../skeet";
-import {useSkeet} from "../../contexts/SkeetContext";
+import Routes from "routes";
+import UserReports from "../../views/admin/default";
+// import {getInviteCodes, getProfile, login} from "../../skeet";
+// import {useSkeet} from "../../contexts/SkeetContext";
 
 // Custom Chakra theme
 export default function Dashboard(props: { [x: string]: any }) {
@@ -18,25 +20,11 @@ export default function Dashboard(props: { [x: string]: any }) {
 	const [ fixed ] = useState(false);
 	const [ toggleSidebar, setToggleSidebar ] = useState(false);
 	// functions for changing the states from components
-	const { skeetDispatch } = useSkeet();
+	// const { skeetDispatch } = useSkeet();
 
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
-
-	React.useEffect(() => {
-		async function fetchData() {
-			const agent = await login()
-			const loggedInDid = agent.session.did
-			const profile = await getProfile(agent, loggedInDid)
-			const invites = await getInviteCodes(agent)
-
-			skeetDispatch({type: 'SET_PROFILE', payload: {profile: profile.data}})
-			skeetDispatch({type: 'SET_INVITES', payload: {invites: invites}})
-		}
-		fetchData();
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-	}, [skeetDispatch])
 
 	const getActiveRoute = (routes: RoutesType[]): string => {
 		let activeRoute = 'Default Brand Text';
@@ -68,7 +56,11 @@ export default function Dashboard(props: { [x: string]: any }) {
 	const getRoutes = (routes: RoutesType[]): any => {
 		return routes.map((route: RoutesType, key: any) => {
 			if (route.layout === '/admin') {
-				return <Route path={route.layout + route.path} component={route.component} key={key} />;
+				return (
+					<Route path={route.layout + route.path} key={key}>
+						{route.component}
+					</Route>
+				);
 			} else {
 				return null;
 			}
@@ -110,18 +102,13 @@ export default function Dashboard(props: { [x: string]: any }) {
 							/>
 						</Box>
 					</Portal>
-
-					{getRoute() ? (
-						<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
-							<Switch>
-								{getRoutes(routes)}
-								<Redirect from='/' to='/admin/default' />
-							</Switch>
-						</Box>
-					) : null}
+					<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
+						<UserReports />
+					</Box>
 					<Box>
 						<Footer />
 					</Box>
+
 				</Box>
 			</SidebarContext.Provider>
 		</Box>

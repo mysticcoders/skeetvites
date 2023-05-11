@@ -9,14 +9,14 @@ import {
 import dayjs from "dayjs";
 import * as ComAtprotoServerDefs from "@atproto/api/src/client/types/com/atproto/server/defs";
 
-export async function login() : Promise<BskyAgent> {
+export async function login(identifier, password) : Promise<BskyAgent> {
     const agent = new BskyAgent({
         service: 'https://bsky.social',
     });
 
     await agent.login({
-        identifier: process.env.REACT_APP_IDENTIFIER,
-        password: process.env.REACT_APP_PASSWORD,
+        identifier,
+        password,
     });
 
     return agent

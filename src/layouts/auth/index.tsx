@@ -33,6 +33,8 @@ export default function Auth() {
 	};
 	const authBg = useColorModeValue('white', 'navy.900');
 	document.documentElement.dir = 'ltr';
+
+	console.dir(getRoutes(routes))
 	return (
 		<Box>
 			<SidebarContext.Provider
