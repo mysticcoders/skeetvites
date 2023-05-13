@@ -47,8 +47,10 @@ import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
-import {getInviteCodes, getProfile, login} from "../../../skeet";
+import {getInviteCodes, getProfile, login, refresh} from "../../../skeet";
 import {useSkeet} from "../../../contexts/SkeetContext";
+
+import store from 'store2'
 
 function SignIn() {
   // Chakra color mode
@@ -61,8 +63,16 @@ function SignIn() {
   const history = useHistory()
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
+
+  const [bskySession] = React.useState(() => {
+    // getting stored value
+    return store.get('bsky_session')
+  });
+
   async function handleLogin(identifier, password) {
     const agent = await login(identifier, password)
+    store.set('bsky_session', agent.session)
+
     const loggedInDid = agent.session.did
     const profile = await getProfile(agent, loggedInDid)
     const invites = await getInviteCodes(agent)
@@ -72,6 +82,25 @@ function SignIn() {
     skeetDispatch({type: 'SET_INVITES', payload: {invites: invites}})
     history.push('/admin/default')
   }
+
+  async function refreshSession() {
+    const agent = await refresh(bskySession)
+    const loggedInDid = agent.session.did
+    const profile = await getProfile(agent, loggedInDid)
+    const invites = await getInviteCodes(agent)
+
+    skeetDispatch({type: 'LOGIN', payload: {agent: agent}})
+    skeetDispatch({type: 'SET_PROFILE', payload: {profile: profile.data}})
+    skeetDispatch({type: 'SET_INVITES', payload: {invites: invites}})
+    history.push('/admin/default')
+  }
+
+  React.useEffect(() => {
+    if (bskySession) {
+      console.log("bskySession exists so refreshing")
+      refreshSession()
+    }
+  }, [bskySession])
 
   async function onSubmit(data) {
     await handleLogin(data.identifier, data.password)

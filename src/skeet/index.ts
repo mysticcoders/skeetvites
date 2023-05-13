@@ -9,6 +9,16 @@ import {
 import dayjs from "dayjs";
 import * as ComAtprotoServerDefs from "@atproto/api/src/client/types/com/atproto/server/defs";
 
+export async function refresh(session) : Promise<BskyAgent> {
+    const agent = new BskyAgent({
+        service: 'https://bsky.social',
+    })
+
+    await agent.resumeSession(session)
+
+    return agent
+}
+
 export async function login(identifier, password) : Promise<BskyAgent> {
     const agent = new BskyAgent({
         service: 'https://bsky.social',

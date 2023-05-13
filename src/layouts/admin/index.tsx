@@ -8,10 +8,7 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from 'routes';
-import Routes from "routes";
 import UserReports from "../../views/admin/default";
-// import {getInviteCodes, getProfile, login} from "../../skeet";
-// import {useSkeet} from "../../contexts/SkeetContext";
 
 // Custom Chakra theme
 export default function Dashboard(props: { [x: string]: any }) {

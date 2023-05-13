@@ -10,6 +10,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import {SkeetProvider, useSkeet} from './contexts/SkeetContext';
 import ProtectedRoute from "./ProtectedRoute";
+import InviteManager from "./layouts/admin/InviteManager";
 
 const history = createBrowserHistory();
 
@@ -23,10 +24,16 @@ const App: React.FC = () => {
 					<AuthLayout />
 				</Route>
 				<ProtectedRoute
-					path="/admin"
+					path="/admin/default"
 					isLoggedIn={skeetState.isLoggedIn}
 				>
 					<AdminLayout />
+				</ProtectedRoute>
+				<ProtectedRoute
+					path="/admin/invite-manager"
+					isLoggedIn={skeetState.isLoggedIn}
+				>
+					<InviteManager />
 				</ProtectedRoute>
 				<Redirect from='/' to='/admin' />
 			</Switch>

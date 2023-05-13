@@ -32,6 +32,9 @@ export default function InviteTable(props: { tableData: any }) {
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     let defaultData = tableData;
+
+    const [hideUsed, setHideUsed] = React.useState<boolean>(false)
+
     const columns = [
         columnHelper.accessor('code', {
             id: 'code',
@@ -116,7 +119,7 @@ export default function InviteTable(props: { tableData: any }) {
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        debugTable: true
+        debugTable: true,
     });
     return (
         <Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -125,12 +128,15 @@ export default function InviteTable(props: { tableData: any }) {
                     Invites
                 </Text>
                 <SwitchField
-                    isChecked={true}
+                    isChecked={hideUsed}
                     reversed={true}
                     fontSize='sm'
                     mb='20px'
                     id='1'
                     label='Hide used'
+                    onChange={() => {
+                        setHideUsed(!hideUsed)
+                    }}
                 />
             </Flex>
             <Box>
