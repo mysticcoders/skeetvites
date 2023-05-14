@@ -23,6 +23,7 @@
 		"apexcharts": "^3.35.2",
 		"dayjs": "^1.11.7",
 		"framer-motion": "^4.1.17",
+		"http-server": "^14.1.1",
 		"numeral": "^2.0.6",
 		"react": "^17.0.2",
 		"react-apexcharts": "^1.4.0",

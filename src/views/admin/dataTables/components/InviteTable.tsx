@@ -136,11 +136,16 @@ export default function InviteTable(props: { tableData: any }) {
             ),
             cell: (info: any) => (
                 <Flex align='center'>
-                    {info.getValue().length > 0 ? 'Yes' : 'No'}
+                    {info.getValue().length > 0 ? (
+                        <Button variant="brand" size="xs"
+                            onClick={() => { window.location.href = `https://staging.bsky.app/profile/${skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}` }}
+                        >
+                            @{skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}
+                        </Button>
+                    ) : 'No'}
                 </Flex>
             ),
             filterFn: (row, _columnId, value) => {
-
                 if (value && row.original.uses.length > 0) {
                     return false
                 }

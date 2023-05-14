@@ -3,14 +3,16 @@ import * as AppBskyActorDefs from "@atproto/api/src/client/types/app/bsky/actor/
 import * as ComAtprotoServerDefs from "@atproto/api/src/client/types/com/atproto/server/defs";
 
 import store from 'store2';
+import {BskyAgent} from "@atproto/api";
 
 interface SkeetState {
     isLoggedIn: boolean;
     openAssignInviteModal: boolean;
     inviteCodeForModal: string | null;
-    agent: object | null;
+    agent: BskyAgent | null;
     // @ts-ignore
     profile: AppBskyActorDefs.ProfileViewDetailed | null;
+    didToProfile: {[did: string]: AppBskyActorDefs.ProfileViewDetailed};
     invites: ComAtprotoServerDefs.InviteCode[] | null;
     assignedInvites: {[code: string]: string | null};
 }
@@ -18,7 +20,7 @@ interface SkeetState {
 type SkeetAction =
     | {
     type: "LOGIN";
-    payload: { agent: object };
+    payload: { agent: BskyAgent };
 }
     | {
     type: "LOGOUT";
@@ -34,6 +36,10 @@ type SkeetAction =
     | {
     type: "SET_ASSIGNED_INVITE";
     payload: { assignedInvite: object };
+}
+    | {
+    type: "SET_PROFILE_FOR_DID";
+    payload: { profile: object };
 }
     | {
     type: "OPEN_ASSIGN_INVITE_MODAL";
@@ -57,6 +63,7 @@ const initialSkeetState: SkeetState = {
     agent: null,
     profile: null,
     invites: null,
+    didToProfile: null,
     assignedInvites: store.get('assignedInvites'),
 };
 
@@ -69,6 +76,7 @@ function skeetReducer(state: SkeetState, action: SkeetAction): SkeetState {
                 openAssignInviteModal: false,
                 inviteCodeForModal: null,
                 agent: action.payload.agent,
+                didToProfile: null,
                 profile: null,
                 invites: null,
                 assignedInvites: store.get('assignedInvites'),
@@ -109,6 +117,14 @@ function skeetReducer(state: SkeetState, action: SkeetAction): SkeetState {
                 ...state,
                 openAssignInviteModal: false,
                 inviteCodeForModal: null
+            } as SkeetState;
+        case "SET_PROFILE_FOR_DID":
+            return {
+                ...state,
+                didToProfile: {
+                    ...state.didToProfile,
+                    [action.payload.profile['did']]: action.payload.profile
+                }
             } as SkeetState;
         default:
             return state;

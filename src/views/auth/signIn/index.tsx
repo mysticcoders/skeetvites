@@ -110,17 +110,19 @@ function SignIn() {
               fontSize='md'>
               Enter your identifier and app password to sign in!
             </Text>
-            <Button
-                fontSize='sm'
-                variant='brand'
-                fontWeight='500'
-                mb='24px'
-                onClick={async () => {
-                  await handleLogin(process.env.REACT_APP_IDENTIFIER, process.env.REACT_APP_PASSWORD)
-                }}
-            >
-              Dev Login
-            </Button>
+            { (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') && (
+                <Button
+                    fontSize='sm'
+                    variant='brand'
+                    fontWeight='500'
+                    mb='24px'
+                    onClick={async () => {
+                      await handleLogin(process.env.REACT_APP_IDENTIFIER, process.env.REACT_APP_PASSWORD)
+                    }}
+                >
+                  Dev Login
+                </Button>
+            )}
           </Box>
           <Flex
             zIndex='2'

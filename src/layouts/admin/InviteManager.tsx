@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import routes from 'routes';
 import InviteTable from "../../views/admin/dataTables/components/InviteTable";
 import {useSkeet} from "../../contexts/SkeetContext";
+import {getProfiles} from "../../skeet";
 
 // Custom Chakra theme
 export default function InviteManager(props: { [x: string]: any }) {
@@ -17,7 +18,28 @@ export default function InviteManager(props: { [x: string]: any }) {
     const [ fixed ] = useState(false);
     const [ toggleSidebar, setToggleSidebar ] = useState(false);
     // functions for changing the states from components
-    const { skeetState } = useSkeet();
+    const { skeetState, skeetDispatch } = useSkeet();
+
+    async function batchProfiles(batch: string[]) {
+        const profiles = await getProfiles(skeetState.agent, batch)
+
+        for(const profile of profiles.data.profiles) {
+            skeetDispatch({ type: "SET_PROFILE_FOR_DID", payload: { profile: profile }})
+        }
+    }
+
+    React.useEffect(() => {
+        const redeemedInvites = skeetState.invites.filter((invite) => invite.uses.length > 0).map((invite) => {
+            return invite.uses?.[0].usedBy
+        })
+
+        const batchSize = 25
+        for (let i = 0; i < redeemedInvites.length; i += batchSize) {
+            const batch = redeemedInvites.slice(i, i + batchSize);
+            batchProfiles(batch)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const getActiveRoute = (routes: RoutesType[]): string => {
         let activeRoute = 'Default Brand Text';
