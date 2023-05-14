@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/App.css';
 import {Route, Switch, Redirect, HashRouter} from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+// import { createBrowserHistory } from 'history';
 
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
@@ -12,7 +12,7 @@ import {SkeetProvider, useSkeet} from './contexts/SkeetContext';
 import ProtectedRoute from "./ProtectedRoute";
 import InviteManager from "./layouts/admin/InviteManager";
 
-const browserHistory = createBrowserHistory();
+// const browserHistory = createBrowserHistory();
 
 const App: React.FC = () => {
 	const { skeetState } = useSkeet();

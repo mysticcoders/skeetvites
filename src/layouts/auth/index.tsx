@@ -24,6 +24,7 @@ export default function Auth() {
 		if(skeetState.isLoggedIn) {
 			history.push('/admin/default')
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [skeetState.isLoggedIn])
 
 	const getRoutes = (

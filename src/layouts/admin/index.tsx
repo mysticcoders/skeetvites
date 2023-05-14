@@ -6,7 +6,6 @@ import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from 'routes';
 import UserReports from "../../views/admin/default";
 
@@ -18,10 +17,6 @@ export default function Dashboard(props: { [x: string]: any }) {
 	const [ toggleSidebar, setToggleSidebar ] = useState(false);
 	// functions for changing the states from components
 	// const { skeetDispatch } = useSkeet();
-
-	const getRoute = () => {
-		return window.location.pathname !== '/admin/full-screen-maps';
-	};
 
 	const getActiveRoute = (routes: RoutesType[]): string => {
 		let activeRoute = 'Default Brand Text';
@@ -49,19 +44,6 @@ export default function Dashboard(props: { [x: string]: any }) {
 			}
 		}
 		return activeNavbar;
-	};
-	const getRoutes = (routes: RoutesType[]): any => {
-		return routes.map((route: RoutesType, key: any) => {
-			if (route.layout === '/admin') {
-				return (
-					<Route path={route.layout + route.path} key={key}>
-						{route.component}
-					</Route>
-				);
-			} else {
-				return null;
-			}
-		});
 	};
 	document.documentElement.dir = 'ltr';
 	const { onOpen } = useDisclosure();

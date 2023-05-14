@@ -1,5 +1,5 @@
 // Chakra imports
-import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import Footer from 'components/footer/FooterAuth';
 import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
@@ -10,7 +10,7 @@ import { FaChevronLeft } from 'react-icons/fa';
 import { useSkeet } from '../../contexts/SkeetContext';
 
 function AuthIllustration(props: { children: JSX.Element | string; illustrationBackground: string }) {
-	const { children, illustrationBackground } = props;
+	const { children} = props;
 	const { skeetState } = useSkeet();
 	// Chakra color mode
 	return (

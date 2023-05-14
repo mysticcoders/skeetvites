@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
    isLoggedIn,
    ...rest
 }) => {
-    const { skeetDispatch, skeetState } = useSkeet();
+    const { skeetDispatch} = useSkeet();
 
     const [bskySession] = React.useState(() => {
         // getting stored value
@@ -40,6 +40,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         if (bskySession) {
             refreshSession()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bskySession])
 
     return (

@@ -6,9 +6,7 @@ import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
 import routes from 'routes';
-import UserReports from "../../views/admin/default";
 import InviteTable from "../../views/admin/dataTables/components/InviteTable";
 import {useSkeet} from "../../contexts/SkeetContext";
 
@@ -20,10 +18,6 @@ export default function InviteManager(props: { [x: string]: any }) {
     const [ toggleSidebar, setToggleSidebar ] = useState(false);
     // functions for changing the states from components
     const { skeetState } = useSkeet();
-
-    const getRoute = () => {
-        return window.location.pathname !== '/admin/full-screen-maps';
-    };
 
     const getActiveRoute = (routes: RoutesType[]): string => {
         let activeRoute = 'Default Brand Text';

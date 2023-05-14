@@ -23,7 +23,7 @@
 import React from 'react';
 
 // Chakra imports
-import { Box, Grid } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import InviteTable from "../dataTables/components/InviteTable";
 
 import { useSkeet } from '../../../contexts/SkeetContext';

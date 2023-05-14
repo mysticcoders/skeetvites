@@ -27,6 +27,7 @@ export default function AssignNameToInviteModal() {
             }
             onOpen();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [skeetState.openAssignInviteModal])
 
     React.useEffect(() => {
@@ -34,6 +35,7 @@ export default function AssignNameToInviteModal() {
             setName('')
             skeetDispatch({ type: 'CLOSE_ASSIGN_INVITE_MODAL' })
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen])
 
     return (
