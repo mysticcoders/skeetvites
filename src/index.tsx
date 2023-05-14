@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/App.css';
-import {Router, Route, Switch, Redirect, HashRouter} from 'react-router-dom';
+import {Route, Switch, Redirect, HashRouter} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 import AuthLayout from './layouts/auth';
@@ -12,11 +12,10 @@ import {SkeetProvider, useSkeet} from './contexts/SkeetContext';
 import ProtectedRoute from "./ProtectedRoute";
 import InviteManager from "./layouts/admin/InviteManager";
 
-const history = createBrowserHistory();
+const browserHistory = createBrowserHistory();
 
 const App: React.FC = () => {
 	const { skeetState } = useSkeet();
-
 	return (
 		<HashRouter>
 			<Switch>
@@ -35,7 +34,7 @@ const App: React.FC = () => {
 				>
 					<InviteManager />
 				</ProtectedRoute>
-				<Redirect from='/' to='/admin' />
+				<Redirect from='/' to='/admin/default' />
 			</Switch>
 		</HashRouter>
 	);

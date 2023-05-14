@@ -1,8 +1,10 @@
-import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
+import {Box, Button, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, VStack} from '@chakra-ui/react';
 import {
+    ColumnFiltersState,
     createColumnHelper,
     flexRender,
     getCoreRowModel,
+    getFilteredRowModel,
     getSortedRowModel,
     SortingState,
     useReactTable
@@ -15,6 +17,8 @@ import dayjs from 'dayjs';
 // Assets
 import SwitchField from "../../../../components/fields/SwitchField";
 import {InviteCodeUse} from "@atproto/api/dist/client/types/com/atproto/server/defs";
+import {useSkeet} from "../../../../contexts/SkeetContext";
+import AssignNameToInviteModal from "../../invites/AssignNameToInviteModal";
 
 type RowObj = {
     code: string;
@@ -28,7 +32,12 @@ const columnHelper = createColumnHelper<RowObj>();
 // const columns = columnsDataCheck;
 export default function InviteTable(props: { tableData: any }) {
     const { tableData } = props;
+    const { skeetState, skeetDispatch } = useSkeet()
     const [ sorting, setSorting ] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([{
+        id: 'uses',
+        value: true,
+    }])
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     let defaultData = tableData;
@@ -49,9 +58,32 @@ export default function InviteTable(props: { tableData: any }) {
             ),
             cell: (info: any) => (
                 <Flex align='center'>
-                    <Text color={textColor} fontSize='sm' fontWeight='700' textDecoration={info.row.original.uses.length > 0 ? 'line-through' : null}>
-                        {info.getValue()}
-                    </Text>
+                    <VStack
+                        spacing={2}
+                        align="stretch"
+                    >
+                        <Box>
+                            <Text color={textColor} fontSize='sm' fontWeight='700' textDecoration={info.row.original.uses.length > 0 ? 'line-through' : null}>
+                                {info.getValue()}
+                            </Text>
+                        </Box>
+                        <Box>
+                            <Button
+                                color={textColor} fontSize='sm' fontWeight='200' variant="link"
+                                onClick={() => { skeetDispatch({ type: 'OPEN_ASSIGN_INVITE_MODAL', payload: { inviteCode: info.getValue() }})}}
+                            >
+                                {!skeetState.assignedInvites?.[info.getValue()] ? (
+                                    <>
+                                        Add Name
+                                    </>
+                                ) : (
+                                    <>
+                                        {skeetState.assignedInvites[info.getValue()]}
+                                    </>
+                                )}
+                            </Button>
+                        </Box>
+                    </VStack>
                 </Flex>
             )
         }),
@@ -106,38 +138,57 @@ export default function InviteTable(props: { tableData: any }) {
                 <Flex align='center'>
                     {info.getValue().length > 0 ? 'Yes' : 'No'}
                 </Flex>
-            )
+            ),
+            filterFn: (row, _columnId, value) => {
+
+                if (value && row.original.uses.length > 0) {
+                    return false
+                }
+                return true
+            }
         })
     ];
     const [ data] = React.useState(() => [ ...defaultData ]);
     const table = useReactTable({
         data,
         columns,
+        enableFilters: true,
+        enableColumnFilters: true,
+        getFilteredRowModel: getFilteredRowModel(),
         state: {
-            sorting
+            sorting,
+            columnFilters,
         },
+        onColumnFiltersChange: setColumnFilters,
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         debugTable: true,
     });
+
     return (
         <Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
             <Flex px='25px' mb="8px" justifyContent='space-between' align='center'>
                 <Text color={textColor} fontSize='22px' fontWeight='700' lineHeight='100%'>
                     Invites
                 </Text>
-                <SwitchField
-                    isChecked={hideUsed}
-                    reversed={true}
-                    fontSize='sm'
-                    mb='20px'
-                    id='1'
-                    label='Hide used'
-                    onChange={() => {
-                        setHideUsed(!hideUsed)
-                    }}
-                />
+                <Box>
+                    <SwitchField
+                        isChecked={!hideUsed}
+                        reversed={true}
+                        fontSize='sm'
+                        mb='20px'
+                        id='1'
+                        label='Hide used'
+                        onChange={() => {
+                            setHideUsed(!hideUsed)
+                            setColumnFilters([{
+                                id: 'uses',
+                                value: hideUsed,
+                            }])
+                        }}
+                    />
+                </Box>
             </Flex>
             <Box>
                 <Table variant='simple' color='gray.500' mb='24px' mt="12px">
@@ -190,6 +241,7 @@ export default function InviteTable(props: { tableData: any }) {
                     </Tbody>
                 </Table>
             </Box>
+            <AssignNameToInviteModal />
         </Card>
     );
 }

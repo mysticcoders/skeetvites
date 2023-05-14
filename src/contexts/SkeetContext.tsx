@@ -2,12 +2,17 @@ import React, {createContext, ReactNode, useContext, useReducer} from "react";
 import * as AppBskyActorDefs from "@atproto/api/src/client/types/app/bsky/actor/defs";
 import * as ComAtprotoServerDefs from "@atproto/api/src/client/types/com/atproto/server/defs";
 
+import store from 'store2';
+
 interface SkeetState {
     isLoggedIn: boolean;
+    openAssignInviteModal: boolean;
+    inviteCodeForModal: string | null;
     agent: object | null;
     // @ts-ignore
     profile: AppBskyActorDefs.ProfileViewDetailed | null;
     invites: ComAtprotoServerDefs.InviteCode[] | null;
+    assignedInvites: {[code: string]: string | null};
 }
 
 type SkeetAction =
@@ -26,6 +31,17 @@ type SkeetAction =
     type: "SET_INVITES";
     payload: { invites: object };
 }
+    | {
+    type: "SET_ASSIGNED_INVITE";
+    payload: { assignedInvite: object };
+}
+    | {
+    type: "OPEN_ASSIGN_INVITE_MODAL";
+    payload: { inviteCode: string };
+}
+    | {
+    type: "CLOSE_ASSIGN_INVITE_MODAL";
+}
 ;
 
 interface SkeetContextProps {
@@ -36,9 +52,12 @@ interface SkeetContextProps {
 // Define the initial state of the reducer
 const initialSkeetState: SkeetState = {
     isLoggedIn: false,
+    openAssignInviteModal: false,
+    inviteCodeForModal: null,
     agent: null,
     profile: null,
     invites: null,
+    assignedInvites: store.get('assignedInvites'),
 };
 
 // Define the reducer function
@@ -47,9 +66,12 @@ function skeetReducer(state: SkeetState, action: SkeetAction): SkeetState {
         case "LOGIN":
             return {
                 isLoggedIn: true,
+                openAssignInviteModal: false,
+                inviteCodeForModal: null,
                 agent: action.payload.agent,
                 profile: null,
                 invites: null,
+                assignedInvites: store.get('assignedInvites'),
             };
         case "LOGOUT":
             return initialSkeetState;
@@ -62,6 +84,31 @@ function skeetReducer(state: SkeetState, action: SkeetAction): SkeetState {
             return {
                 ...state,
                 invites: action.payload.invites,
+            } as SkeetState;
+        case "SET_ASSIGNED_INVITE":
+            let assignedInvites = store.get('assignedInvites')
+            assignedInvites = { ...assignedInvites,
+                [action.payload.assignedInvite?.['code']]: action.payload.assignedInvite?.['name']
+            }
+            store.set('assignedInvites', assignedInvites)
+            return {
+                ...state,
+                assignedInvites: {
+                    ...state.assignedInvites,
+                    [action.payload.assignedInvite?.['code']]: action.payload.assignedInvite?.['name']
+                }
+            } as SkeetState;
+        case "OPEN_ASSIGN_INVITE_MODAL":
+            return {
+                ...state,
+                openAssignInviteModal: true,
+                inviteCodeForModal: action.payload.inviteCode
+            } as SkeetState;
+        case "CLOSE_ASSIGN_INVITE_MODAL":
+            return {
+                ...state,
+                openAssignInviteModal: false,
+                inviteCodeForModal: null
             } as SkeetState;
         default:
             return state;

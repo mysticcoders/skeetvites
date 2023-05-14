@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
 // Chakra imports
 import { Box, Icon, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 // Assets
@@ -15,6 +16,7 @@ export default function UserReports() {
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 
+	const history = useHistory();
 	const { skeetState } = useSkeet();
 
 	const [availableInvites, setAvailableInvites] = React.useState<number>(0);
@@ -69,6 +71,7 @@ export default function UserReports() {
 							w='56px'
 							h='56px'
 							bg={boxBg}
+							onClick={() => { history.push('/admin/invite-manager')}}
 							icon={<Icon w='32px' h='32px' as={MdHandshake} color={brandColor} />}
 						/>
 					}

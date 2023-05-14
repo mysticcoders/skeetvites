@@ -17,18 +17,14 @@ export default function Default(props: {
 		<Box w='100%' fontWeight='500' {...rest}>
 			{reversed ? (
 				<Flex align='center' borderRadius='16px'>
-					{isChecked && onChange ? (
-						<Switch
-							isChecked={isChecked}
-							id={id}
-							variant='main'
-							colorScheme='brandScheme'
-							size='md'
-							onChange={onChange}
-						/>
-					) : (
-						<Switch id={id} variant='main' colorScheme='brandScheme' size='md' />
-					)}
+					<Switch
+						isChecked={isChecked}
+						id={id}
+						variant='main'
+						colorScheme='brandScheme'
+						size='md'
+						onChange={onChange}
+					/>
 					<FormLabel
 						ms='15px'
 						htmlFor={id}

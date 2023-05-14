@@ -1,5 +1,6 @@
+import React from 'react'
 import { useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import routes from 'routes';
 
 // Chakra imports
@@ -7,14 +8,24 @@ import { Box, useColorModeValue } from '@chakra-ui/react';
 
 // Layout components
 import { SidebarContext } from 'contexts/SidebarContext';
+import {useSkeet} from "../../contexts/SkeetContext";
 
 // Custom Chakra theme
 export default function Auth() {
 	// states and functions
-	const [ toggleSidebar, setToggleSidebar ] = useState(false); 
+	const [ toggleSidebar, setToggleSidebar ] = useState(false);
+	const { skeetState } = useSkeet();
+	const history = useHistory();
 	const getRoute = () => {
 		return window.location.pathname !== '/auth/full-screen-maps';
 	};
+
+	React.useEffect(() => {
+		if(skeetState.isLoggedIn) {
+			history.push('/admin/default')
+		}
+	}, [skeetState.isLoggedIn])
+
 	const getRoutes = (
 		routes: RoutesType[]
 	): any => {
@@ -34,7 +45,6 @@ export default function Auth() {
 	const authBg = useColorModeValue('white', 'navy.900');
 	document.documentElement.dir = 'ltr';
 
-	console.dir(getRoutes(routes))
 	return (
 		<Box>
 			<SidebarContext.Provider
