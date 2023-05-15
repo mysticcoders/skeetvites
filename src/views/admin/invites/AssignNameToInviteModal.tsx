@@ -22,7 +22,7 @@ export default function AssignNameToInviteModal() {
 
     React.useEffect(() => {
         if (skeetState.openAssignInviteModal) {
-            if (skeetState.assignedInvites[skeetState.inviteCodeForModal]) {
+            if (skeetState.assignedInvites?.[skeetState.inviteCodeForModal]) {
                 setName(skeetState.assignedInvites[skeetState.inviteCodeForModal])
             }
             onOpen();
