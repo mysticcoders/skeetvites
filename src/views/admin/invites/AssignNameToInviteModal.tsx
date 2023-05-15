@@ -56,7 +56,7 @@ export default function AssignNameToInviteModal() {
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Name</FormLabel>
-                        <Input value={ name } onChange={(e) => { setName(e.target.value )}} placeholder="Name" />
+                        <Input ref={initialRef} value={ name } onChange={(e) => { setName(e.target.value )}} placeholder="Name" />
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>

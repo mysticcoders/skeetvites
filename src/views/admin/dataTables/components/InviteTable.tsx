@@ -13,6 +13,7 @@ import {
 import Card from 'components/card/Card';
 import * as React from 'react';
 import dayjs from 'dayjs';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // Assets
 import SwitchField from "../../../../components/fields/SwitchField";
@@ -64,7 +65,10 @@ export default function InviteTable(props: { tableData: any }) {
                     >
                         <Box>
                             <Text color={textColor} fontSize='sm' fontWeight='700' textDecoration={info.row.original.uses.length > 0 ? 'line-through' : null}>
-                                {info.getValue()}
+                                <CopyToClipboard text={info.getValue()}>
+                                    <span>{info.getValue()}</span>
+                                </CopyToClipboard>
+                                {}
                             </Text>
                         </Box>
                         <Box>
@@ -84,25 +88,6 @@ export default function InviteTable(props: { tableData: any }) {
                             </Button>
                         </Box>
                     </VStack>
-                </Flex>
-            )
-        }),
-        columnHelper.accessor('createdBy', {
-            id: 'createdBy',
-            header: () => (
-                <Text
-                    justifyContent='space-between'
-                    align='center'
-                    fontSize={{ sm: '10px', lg: '12px' }}
-                    color='gray.400'>
-                    CREATED BY
-                </Text>
-            ),
-            cell: (info: any) => (
-                <Flex align='center'>
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {info.getValue()}
-                    </Text>
                 </Flex>
             )
         }),
@@ -131,7 +116,7 @@ export default function InviteTable(props: { tableData: any }) {
                     align='center'
                     fontSize={{ sm: '10px', lg: '12px' }}
                     color='gray.400'>
-                    USED
+                    USED BY
                 </Text>
             ),
             cell: (info: any) => (
