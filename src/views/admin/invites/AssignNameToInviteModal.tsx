@@ -38,6 +38,15 @@ export default function AssignNameToInviteModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen])
 
+    const onFormSubmit = e => {
+        e.preventDefault()
+        skeetDispatch({
+            type: "SET_ASSIGNED_INVITE",
+            payload: { assignedInvite: { code: skeetState.inviteCodeForModal, name: name } }
+        })
+        onClose()
+    }
+
     return (
         <Modal
             initialFocusRef={initialRef}
@@ -47,6 +56,7 @@ export default function AssignNameToInviteModal() {
         >
             <ModalOverlay />
             <ModalContent>
+                <form onSubmit={onFormSubmit}>
                 <ModalHeader>Assign name to invite code</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
@@ -60,17 +70,12 @@ export default function AssignNameToInviteModal() {
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={() => {
-                        skeetDispatch({
-                            type: "SET_ASSIGNED_INVITE",
-                            payload: { assignedInvite: { code: skeetState.inviteCodeForModal, name: name } }
-                        })
-                        onClose()
-                    }} colorScheme="brand" mr={3}>
+                    <Button type="submit" colorScheme="brand" mr={3}>
                         Save
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>
                 </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     )
