@@ -200,7 +200,7 @@ export default function InviteTable(props: { tableData: any }) {
                         >
                             @{skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}
                         </Button>
-                    ) : 'No'}
+                    ) : '-'}
                 </Flex>
             ),
             filterFn: (row, _columnId, value) => {
