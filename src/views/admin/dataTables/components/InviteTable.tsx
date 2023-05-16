@@ -1,4 +1,18 @@
-import {Box, Button, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, VStack} from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    Button,
+    Flex,
+    Table,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
+    useColorModeValue,
+    VStack
+} from '@chakra-ui/react';
 import {
     ColumnFiltersState,
     createColumnHelper,
@@ -25,6 +39,8 @@ type RowObj = {
     code: string;
     createdBy: string;
     createdAt: string;
+    followsYou: string;
+    avatar: string;
     uses: InviteCodeUse[];
 };
 
@@ -108,6 +124,63 @@ export default function InviteTable(props: { tableData: any }) {
                 </Text>
             )
         }),
+        columnHelper.accessor('avatar', {
+            id: 'avatar',
+            header: () => (
+                <Text
+                    justifyContent='space-between'
+                    align='center'
+                    fontSize={{ sm: '10px', lg: '12px' }}
+                    color='gray.400'>
+                    AVATAR
+                </Text>
+            ),
+            cell: (info: any) => (
+                <Flex align='center'>
+                { info.row.original.uses.length > 0 && (
+                    <Avatar
+                        _hover={{ cursor: 'pointer' }}
+                        color='white'
+                        name={skeetState.didToProfile[info.row.original.uses?.[0]?.usedBy]['displayName']}
+                        src={skeetState.didToProfile[info.row.original.uses?.[0]?.usedBy]['avatar']}
+                        bg='#11047A'
+                        size='sm'
+                        w='40px'
+                        h='40px'
+                    />
+                )}
+                </Flex>
+            )
+        }),
+        columnHelper.accessor('followsYou', {
+            id: 'followsYou',
+            header: () => (
+                <Text
+                    justifyContent='space-between'
+                    align='center'
+                    fontSize={{ sm: '10px', lg: '12px' }}
+                    color='gray.400'>
+                    FOLLOWS YOU
+                </Text>
+            ),
+            cell: (info: any) => (
+                <Flex align='center'>
+                { info.row.original.uses.length > 0 && (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {skeetState.didToProfile[info.row.original.uses?.[0]?.usedBy]['viewer']['followedBy'] ? (
+                            <>
+                            Follows You
+                            </>
+                        ) : (
+                            <>
+                            Does Not Follow You
+                            </>
+                        )}
+                    </Text>
+                )}
+                </Flex>
+            )
+        }),
         columnHelper.accessor('uses', {
             id: 'uses',
             header: () => (
@@ -123,7 +196,7 @@ export default function InviteTable(props: { tableData: any }) {
                 <Flex align='center'>
                     {info.getValue().length > 0 ? (
                         <Button variant="brand" size="xs"
-                            onClick={() => { window.location.href = `https://staging.bsky.app/profile/${skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}` }}
+                            onClick={() => { window.open(`https://staging.bsky.app/profile/${skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}`) }}
                         >
                             @{skeetState.didToProfile[info.getValue()?.[0]?.usedBy]['handle']}
                         </Button>
