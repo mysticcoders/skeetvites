@@ -11,11 +11,66 @@ import theme from './theme/theme';
 import {SkeetProvider, useSkeet} from './contexts/SkeetContext';
 import ProtectedRoute from "./ProtectedRoute";
 import InviteManager from "./layouts/admin/InviteManager";
+import store from "store2";
+import {getInviteCodes, getProfile, refresh} from "./skeet";
 
 const browserHistory = createBrowserHistory();
 
 const App: React.FC = () => {
-	const { skeetState } = useSkeet();
+	const { skeetState, skeetDispatch } = useSkeet();
+
+	const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+	const [bskySession] = React.useState(() => {
+		return store.get('bsky_session')
+	});
+
+	React.useEffect(() => {
+		if (bskySession) {
+
+			async function refreshSession() {
+				try {
+					console.log('Calling refreshSession')
+					const agent = await refresh(bskySession)
+					// const invites = await getInviteCodes(agent)
+
+					skeetDispatch({type: 'LOGIN', payload: {agent: agent}})
+					// skeetDispatch({type: 'SET_INVITES', payload: {invites: invites}})
+
+					setIsLoggedIn(true)
+				} catch (error) {
+					console.error(error)
+				}
+			}
+			refreshSession()
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [bskySession])
+
+	React.useEffect(() => {
+		if (bskySession && skeetState.isLoggedIn) {
+			async function fetchProfile() {
+				try {
+					const profile = await getProfile(skeetState.agent, skeetState.agent.session.did)
+					skeetDispatch({type: 'SET_PROFILE', payload: {profile: profile.data}})
+				} catch (error) {
+					console.error(error)
+				}
+			}
+
+			async function fetchInvites() {
+				try {
+					const invites = await getInviteCodes(skeetState.agent)
+					skeetDispatch({type: 'SET_INVITES', payload: {invites: invites}})
+				} catch (error) {
+					console.error(error)
+				}
+			}
+			fetchProfile()
+			fetchInvites()
+		}
+	}, [bskySession, skeetState.isLoggedIn])
+
 	return (
 		<Router history={browserHistory}>
 			<Switch>
@@ -24,13 +79,13 @@ const App: React.FC = () => {
 				</Route>
 				<ProtectedRoute
 					path="/admin/default"
-					isLoggedIn={skeetState.isLoggedIn}
+					isLoggedIn={isLoggedIn}
 				>
 					<AdminLayout />
 				</ProtectedRoute>
 				<ProtectedRoute
 					path="/admin/invite-manager"
-					isLoggedIn={skeetState.isLoggedIn}
+					isLoggedIn={isLoggedIn}
 				>
 					<InviteManager />
 				</ProtectedRoute>

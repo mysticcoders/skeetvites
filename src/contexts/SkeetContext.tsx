@@ -4,6 +4,7 @@ import * as ComAtprotoServerDefs from "@atproto/api/src/client/types/com/atproto
 
 import store from 'store2';
 import {BskyAgent} from "@atproto/api";
+import {ProfileViewDetailed} from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 
 interface SkeetState {
     isLoggedIn: boolean;
@@ -84,10 +85,11 @@ function skeetReducer(state: SkeetState, action: SkeetAction): SkeetState {
         case "LOGOUT":
             return initialSkeetState;
         case "SET_PROFILE":
+            const profile = action.payload.profile as ProfileViewDetailed
             return {
                 ...state,
-                profile: action.payload.profile,
-            } as SkeetState;
+                profile: profile,
+            }
         case "SET_INVITES":
             return {
                 ...state,
