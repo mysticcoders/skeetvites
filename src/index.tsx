@@ -69,6 +69,7 @@ const App: React.FC = () => {
 			fetchProfile()
 			fetchInvites()
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [bskySession, skeetState.isLoggedIn])
 
 	return (
