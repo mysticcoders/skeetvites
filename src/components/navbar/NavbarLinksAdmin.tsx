@@ -92,7 +92,7 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 							fontSize='sm'
 							fontWeight='700'
 							color={textColor}>
-							👋&nbsp; Hey, Andrew
+							👋 &nbsp;{`Hey, ${skeetState.profile?.displayName}`}
 						</Text>
 					</Flex>
 					<Flex flexDirection='column' p='10px'>
