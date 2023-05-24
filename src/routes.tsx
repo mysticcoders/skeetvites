@@ -1,5 +1,6 @@
 import { Icon } from '@chakra-ui/react';
-import {MdEmojiPeople, MdGroup, MdHome, MdLock} from 'react-icons/md';
+import {MdEmojiPeople, MdHome, MdLock} from 'react-icons/md';
+// import {MdEmojiPeople, MdGroup, MdHome, MdLock} from 'react-icons/md';
 
 // Admin Imports
 import MainDashboard from 'views/admin/default';
@@ -7,7 +8,7 @@ import InvitesList from "./views/admin/invites";
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
-import PeopleList from "./views/admin/people";
+// import PeopleList from "./views/admin/people";
 
 const routes = [
 	{
