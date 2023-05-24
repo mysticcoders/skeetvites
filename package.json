@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.2.11",
+		"@atproto/api": "^0.3.7",
 		"@chakra-ui/icons": "^1.1.5",
 		"@chakra-ui/react": "1.8.8",
 		"@chakra-ui/system": "^1.12.1",
